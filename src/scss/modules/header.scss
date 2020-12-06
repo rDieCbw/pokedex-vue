@@ -1,0 +1,19 @@
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #306ab2;
+    padding: 16px;
+    img{
+        width: 200px;
+    }
+    h1{
+        font-size: 26px;
+        font-weight: 900;
+        color: #ffcb05;
+        -webkit-text-stroke-width: 2px;
+        -webkit-text-stroke-color: black;
+        margin-bottom: 0;
+    }
+}

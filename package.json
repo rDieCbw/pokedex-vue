@@ -1,0 +1,40 @@
+{
+  "name": "pokedex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "concurrently \"nodemon /app.js -e js,twig\" \"gulp watch\""
+  },
+  "author": "Raul B. Wohnrath",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Binary-Block/guild-manager/issues"
+  },
+  "homepage": "https://github.com/Binary-Block/guild-manager#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "http-errors": "~1.6.3",
+    "require-dir": "^1.2.0",
+    "twig": "^1.15.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "dotenv": "^8.0.0",
+    "eslint": "^7.11.0",
+    "eslint-config-google": "^0.14.0",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^6.2.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "node-sass": "^4.13.1",
+    "node-sass-middleware": "0.11.0",
+    "nodemon": "^2.0.6"
+  }
+}
