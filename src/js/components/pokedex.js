@@ -1,6 +1,7 @@
 var POKEDEX = {
     delimiters: ['${', '}'],
     template: ' <div class="c-pokedex">\
+                    <img class="bg" :src="setPokedexBg">\
                     <div class="application">\
                         <div class="content">\
                             <div class="details">\
@@ -40,6 +41,7 @@ var POKEDEX = {
     },
     data: function () {
         return {
+            isMobileViewPort: false,
             pokemons: [],
             types: [],
             nextPokemonListPage: null,
@@ -48,7 +50,9 @@ var POKEDEX = {
         }
     },
     computed: {
-        
+        setPokedexBg: function () {
+            return (this.isMobileViewPort == true) ? "/assets/img/pokedex-mobile.svg" : "/assets/img/pokedex.svg"
+        }
     },
     filters: {
         getPokemonId: function(url){
@@ -113,8 +117,15 @@ var POKEDEX = {
         paginate: function(Url){
             this.getPokemons(Url);
         },
+        setResizeListener: function() {
+            window.addEventListener('resize', function() {
+                this.isMobileViewPort = document.documentElement.clientWidth <= 753;
+            }.bind(this))
+        }
     },
     mounted: function (){
+        this.isMobileViewPort = document.documentElement.clientWidth <= 753;
+        this.setResizeListener();
         this.getPokemons(this.apiUrl + "pokemon");
         this.getTypes(this.apiUrl + "type");
     },
