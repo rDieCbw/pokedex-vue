@@ -1,45 +1,49 @@
 var POKEDEX = {
     delimiters: ['${', '}'],
-    template: ' <div class="c-pokedex">\
-                    <img class="bg" :src="setPokedexBg">\
-                    <div class="application">\
-                        <div class="content">\
-                            <div class="details">\
-                                <div v-if="contextPokemon" class="card">\
-                                    <span class="id">#${contextPokemon.id}</span>\
-                                    <img :src="contextPokemon.image">\
-                                    <p class="name">${contextPokemon.name}</p>\
-                                    <div class="types">\
-                                        <span v-for="type in contextPokemon.types">${type}</span>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                            <div class="typeFilter">\
-                                <p>Filter By Type</p>\
-                                <div>\
-                                    <button v-for="(type, index) in types" v-on:click.stop="getPokemonsByType(type.url)">${type.name}</button>\
-                                </div>\
-                            </div>\
-                        </div>\
-                        <div class="listing">\
-                            <div class="pokemons">\
-                                <button v-for="pokemon in pokemons" v-on:click="getPokemonDetails(pokemon.url)">\
-                                    <span># ${pokemon.url|getPokemonId}</span>\
-                                    - \
-                                    <span>${pokemon.name}</span>\
-                                </button>\
-                            </div>\
-                            <div class="pagination">\
-                                <button v-if="prevPokemonListPage" v-on:click.stop="paginate(prevPokemonListPage)">previous</button>\
-                                <button v-if="nextPokemonListPage" v-on:click.stop="paginate(nextPokemonListPage)">next</button>\
+    template: '\
+        <div class="c-pokedex">\
+            <img class="bg" :src="setPokedexBg">\
+            <div class="application">\
+                <div class="content">\
+                    <div class="details">\
+                        <div v-if="contextPokemon" class="card">\
+                            <span class="id">#${contextPokemon.id}</span>\
+                            <img :src="contextPokemon.image">\
+                            <p class="name">${contextPokemon.name}</p>\
+                            <div class="types">\
+                                <span v-for="type in contextPokemon.types">${type}</span>\
                             </div>\
                         </div>\
                     </div>\
-                </div>',
+                    <div class="typeFilter">\
+                        <p>Filter By Type</p>\
+                        <div>\
+                            <button v-for="(type, index) in types" @click.stop="getPokemonsByType(type.url)">${type.name}</button>\
+                        </div>\
+                    </div>\
+                </div>\
+                <div class="listing">\
+                    <div class="pokemons">\
+                        <button v-for="pokemon in pokemons" @click="getPokemonDetails(pokemon.url)">\
+                            <span># ${pokemon.url|getPokemonId}</span>\
+                            - \
+                            <span>${pokemon.name}</span>\
+                        </button>\
+                    </div>\
+                    <div class="pagination">\
+                        <button v-if="prevPokemonListPage" @click.stop="paginate(prevPokemonListPage)">previous</button>\
+                        <button v-if="nextPokemonListPage" @click.stop="paginate(nextPokemonListPage)">next</button>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>',
     props: {
-        apiUrl: {type:String, default: "https://pokeapi.co/api/v2/"},
+        apiUrl: {
+            type: String,
+            default: "https://pokeapi.co/api/v2/"
+        },
     },
-    data: function () {
+    data: function() {
         return {
             isMobileViewPort: false,
             pokemons: [],
@@ -50,80 +54,81 @@ var POKEDEX = {
         }
     },
     computed: {
-        setPokedexBg: function () {
+        setPokedexBg: function() {
             return (this.isMobileViewPort == true) ? "/assets/img/pokedex-mobile.svg" : "/assets/img/pokedex.svg"
         }
     },
     filters: {
-        getPokemonId: function(url){
+        getPokemonId: function(url) {
             return url.split("/")[6];
         }
     },
     methods: {
-        getTypes: function(url){
+        getTypes: function(url) {
             var self = this;
             axios.get(url)
-            .then(function (response) {
-                self.types = response.data.results;
-            })
-            .catch(function (error) {
-                console.log(error);;
-            })
+                .then(function(response) {
+                    self.types = response.data.results;
+                })
+                .catch(function(error) {
+                    console.log(error);;
+                })
         },
-        getPokemons: function(url){
+        getPokemons: function(url) {
             var self = this;
             axios.get(url)
-            .then(function (response) {
-                self.pokemons = response.data.results;
-                self.nextPokemonListPage = response.data.next;
-                self.prevPokemonListPage = response.data.previous;
-            })
-            .catch(function (error) {
-                console.log(error);;
-            })
+                .then(function(response) {
+                    self.pokemons = response.data.results;
+                    self.nextPokemonListPage = response.data.next;
+                    self.prevPokemonListPage = response.data.previous;
+                })
+                .catch(function(error) {
+                    console.log(error);;
+                })
         },
-        getPokemonsByType: function(url){
+        getPokemonsByType: function(url) {
             var self = this;
             axios.get(url)
-            .then(function (response) {
-                self.pokemons = [];
-                for (var i = 0, len = response.data.pokemon.length; i < len; i++) {
-                    self.pokemons.push(response.data.pokemon[i].pokemon)
-                }
-            })
-            .catch(function (error) {
-                console.log(error);;
-            })
+                .then(function(response) {
+                    self.pokemons = [];
+                    for (var i = 0, len = response.data.pokemon.length; i < len; i++) {
+                        self.pokemons.push(response.data.pokemon[i].pokemon)
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);;
+                })
         },
-        getPokemonDetails: function (url) {
+        getPokemonDetails: function(url) {
             var self = this;
             axios.get(url)
-            .then(function (response) {
-                var types = [];
-                for (var i = 0, len = response.data.types.length; i < len; i++) {
-                    types.push(response.data.types[i].type.name)
-                }
-                self.contextPokemon = {
-                    "id": response.data.id,
-                    "name": response.data.name,
-                    "image": response.data.sprites.front_default,
-                    "types": types
-                }
-            })
-            .catch(function (error) {
-                console.log(error);;
-            })
+                .then(function(response) {
+                    var types = [];
+                    for (var i = 0, len = response.data.types.length; i < len; i++) {
+                        types.push(response.data.types[i].type.name)
+                    }
+                    self.contextPokemon = {
+                        "id": response.data.id,
+                        "name": response.data.name,
+                        "image": response.data.sprites.front_default,
+                        "types": types
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);;
+                })
         },
-        paginate: function(Url){
+        paginate: function(Url) {
             this.getPokemons(Url);
         },
         setResizeListener: function() {
+            var self = this;
             window.addEventListener('resize', function() {
-                this.isMobileViewPort = document.documentElement.clientWidth <= 753;
-            }.bind(this))
+                self.isMobileViewPort = document.documentElement.clientWidth <= 753;
+            })
         }
     },
-    mounted: function (){
+    mounted: function() {
         this.isMobileViewPort = document.documentElement.clientWidth <= 753;
         this.setResizeListener();
         this.getPokemons(this.apiUrl + "pokemon");
@@ -131,7 +136,7 @@ var POKEDEX = {
     },
 };
 
-RUR(function () {
+RUR(function() {
     new Vue({
         el: document.querySelector('[data-el=pokedex]'),
         components: {
